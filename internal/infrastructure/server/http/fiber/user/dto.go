@@ -2,9 +2,14 @@ package user
 
 import "service/internal/app/command/user"
 
-type Register struct {
+type RegisterRequest struct {
 	Login    string `json:"login"    required:"true"`
 	Password string `json:"password" required:"true"`
+}
+
+
+type RegisterResponse struct {
+    BearerToken string `json:"bearer_token"`
 }
 
 type Login struct {
@@ -19,7 +24,7 @@ func (l Login) ToCmd() *user.GetUserCmd {
 	}
 }
 
-func (r Register) ToCmd() *user.CreateUserCmd {
+func (r RegisterRequest) ToCmd() *user.CreateUserCmd {
 	return &user.CreateUserCmd{
 		Login:    r.Login,
 		Password: r.Password,
