@@ -16,7 +16,7 @@ func BadRequestErr(err error) fiber.Map {
 	}
 }
 
-func InternalServerErr(err error) fiber.Map {
+func InternalErr(err error) fiber.Map {
 	return fiber.Map{
 		"error":   "Internal server error",
 		"details": err.Error(),
