@@ -45,7 +45,7 @@ func (r *SpecificationRepository) FindByProjectId(
 	projectId entity.ProjectId,
 ) ([]*entity.Specification, error) {
 	var daoSpecs []SpecificationDAO
-	if err := r.db.WithContext(ctx).Where("project_id = ? AND status = ?", projectId.UUID(), entity.StatusCreate).
+	if err := r.db.WithContext(ctx).Where("project_id = ? AND status_id = ?", projectId.UUID(), entity.StatusCreate).
 		Find(&daoSpecs).Error; err != nil {
 		return nil, err
 	}

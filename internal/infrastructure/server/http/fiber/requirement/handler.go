@@ -106,7 +106,7 @@ func (h *RequirementHandler) UpdateRequirement(
 	}
 
 	return c.Status(fiber.StatusOK).
-		JSON(UpdateRequirementResponse{})
+		JSON(UpdateRequirementResponse{Id: in.Id})
 }
 
 func (h *RequirementHandler) DeleteRequirement(
@@ -143,7 +143,7 @@ func (h *RequirementHandler) DeleteRequirement(
 	}
 
 	return c.Status(fiber.StatusOK).
-		JSON(DeleteRequirementResponse{})
+		JSON(DeleteRequirementResponse{Id: in.Id})
 }
 
 func (h *RequirementHandler) AddInSpecification(

@@ -45,7 +45,7 @@ func (r *RequirementRepository) FindByProjectId(
 	projectId entity.ProjectId,
 ) ([]*entity.Requirement, error) {
 	var daoRequirements []RequirementDAO
-	if err := r.db.WithContext(ctx).Where("project_id = ?", projectId.UUID()).Find(&daoRequirements).Error; err != nil {
+	if err := r.db.WithContext(ctx).Where("project_id = ? AND status_id = ?", projectId.UUID(), entity.StatusCreate).Find(&daoRequirements).Error; err != nil {
 		return nil, err
 	}
 

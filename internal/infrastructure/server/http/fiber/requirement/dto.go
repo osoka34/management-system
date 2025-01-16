@@ -28,7 +28,7 @@ type UpdateRequirementRequest struct {
 	Title           string `json:"title"`
 	Description     string `json:"description"`
 	ExecutorId      string `json:"executor_id"`
-	specificationId string `json:"specification_id"`
+	SpecificationId string `json:"specification_id"`
 }
 
 func (r UpdateRequirementRequest) ToCmd() *requirement.UpdateRequirementCmd {
@@ -37,7 +37,7 @@ func (r UpdateRequirementRequest) ToCmd() *requirement.UpdateRequirementCmd {
 		Title:           r.Title,
 		Description:     r.Description,
 		ExecutorId:      r.ExecutorId,
-		SpecificationId: r.specificationId,
+		SpecificationId: r.SpecificationId,
 	}
 }
 
@@ -122,7 +122,7 @@ type GetSpecificationRequirementsRequest struct {
 	SpecificationId string `json:"specification_id" required:"true"`
 }
 
-func (r GetSpecificationRequirementsRequest) ToCmd() *requirement.GetSpecRequirementsCmd{
+func (r GetSpecificationRequirementsRequest) ToCmd() *requirement.GetSpecRequirementsCmd {
 	return &requirement.GetSpecRequirementsCmd{
 		SpecificationId: r.SpecificationId,
 	}
@@ -132,18 +132,17 @@ type GetSpecificationRequirementsResponse struct {
 	Requirements []*Requirement `json:"requirements"`
 }
 
-
 func NewGetSpecificationRequirementsResponse(
-    requirements []*entity.Requirement,
+	requirements []*entity.Requirement,
 ) *GetSpecificationRequirementsResponse {
-    var requirementsDto []*Requirement
-    for _, requirement := range requirements {
-        requirementsDto = append(requirementsDto, FromEntity(requirement))
-    }
+	var requirementsDto []*Requirement
+	for _, requirement := range requirements {
+		requirementsDto = append(requirementsDto, FromEntity(requirement))
+	}
 
-    return &GetSpecificationRequirementsResponse{
-        Requirements: requirementsDto,
-    }
+	return &GetSpecificationRequirementsResponse{
+		Requirements: requirementsDto,
+	}
 }
 
 func FromEntity(requirement *entity.Requirement) *Requirement {

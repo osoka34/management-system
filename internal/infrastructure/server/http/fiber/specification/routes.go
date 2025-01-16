@@ -8,6 +8,6 @@ func (h *SpecificationHandler) Map(router fiber.Router) {
 	group.Post("/create", h.CreateSpecification)
 	group.Post("/update", h.UpdateSpecification)
 	group.Post("/delete", h.DeleteSpecification)
-	group.Post("by_project", h.GetSpecByProjectId)
+	group.Post("by_project_id", h.GetSpecByProjectId)
 	group.Post("by_id", h.GetSpecById)
 }
