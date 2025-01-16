@@ -10,7 +10,7 @@ create table if not exists requirements (
     description text not null,
     executor_id UUID not null,
     project_id UUID not null,
-    specification_id UUID not null,
+    specification_id UUID default "",
     created_at timestamp not null,
     updated_at timestamp not null
 )

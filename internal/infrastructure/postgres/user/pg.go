@@ -27,9 +27,9 @@ func (r *UserRepository) FindById(ctx context.Context, id uuid.UUID) (*entity.Us
 	var daoUser UserDAO
 	if err := r.db.WithContext(ctx).First(&daoUser, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Пользователь не найден
+			return nil, err
 		}
-		return nil, err // Ошибка базы данных
+		return nil, err
 	}
 	return daoUser.ToEntity(), nil
 }
@@ -41,9 +41,9 @@ func (r *UserRepository) FindByCreds(
 	var daoUser UserDAO
 	if err := r.db.WithContext(ctx).First(&daoUser, "login = ? AND password_hash = ?", login, hash).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, err // Пользователь не найден
+			return nil, err
 		}
-		return nil, err // Ошибка базы данных
+		return nil, err
 	}
 	return daoUser.ToEntity(), nil
 }
@@ -52,7 +52,6 @@ func (r *UserRepository) UpdateUser(ctx context.Context, user *entity.User) erro
 	daoUser := FromEntity(user)
 	return r.db.WithContext(ctx).Save(daoUser).Error
 }
-
 
 func (r *UserRepository) GetAllUsers(ctx context.Context) ([]*entity.User, error) {
 	var daoUsers []*UserDAO

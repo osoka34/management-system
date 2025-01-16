@@ -33,9 +33,9 @@ func (r *SpecificationRepository) FindById(
 	var daoSpec SpecificationDAO
 	if err := r.db.WithContext(ctx).First(&daoSpec, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Спецификация не найдена
+			return nil, err
 		}
-		return nil, err // Ошибка базы данных
+		return nil, err
 	}
 	return daoSpec.ToEntity(), nil
 }
@@ -45,7 +45,8 @@ func (r *SpecificationRepository) FindByProjectId(
 	projectId entity.ProjectId,
 ) ([]*entity.Specification, error) {
 	var daoSpecs []SpecificationDAO
-	if err := r.db.WithContext(ctx).Where("project_id = ?", projectId.UUID()).Find(&daoSpecs).Error; err != nil {
+	if err := r.db.WithContext(ctx).Where("project_id = ? AND status = ?", projectId.UUID(), entity.StatusCreate).
+		Find(&daoSpecs).Error; err != nil {
 		return nil, err
 	}
 

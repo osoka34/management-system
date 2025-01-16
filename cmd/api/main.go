@@ -57,6 +57,7 @@ func main() {
 	projectCmdUpdate := projectCmds.NewUpdateProjectCmdHandler(projectRepo)
 	projectCmdDelete := projectCmds.NewDeleteProjectCmdHandler(projectRepo)
 	projectCmdAll := projectCmds.NewGetAllProjectsCmdHandler(projectRepo)
+	projectCmdById := projectCmds.NewGetProjectByIdCmd(projectRepo)
 
 	requirementCmdCreate := requirementCmds.NewCreateRequirementCmdHandler(
 		requirementRepo,
@@ -89,6 +90,9 @@ func main() {
 	specificationCmdUpdate := specificationCmds.NewUpdateSpecificationCmdHandler(specificationRepo)
 	specificationCmdDelete := specificationCmds.NewDeleteSpecificationCmdHandler(specificationRepo)
 
+	specificationCmdGetById := specificationCmds.NewGetByIdCmdHandler(specificationRepo)
+	specificationCmdByProjectId := specificationCmds.NewGetByProjectIdCmdHandler(projectRepo, specificationRepo)
+
 	userCmdGet := userCmds.NewGetUserCmdHandler(userRepo)
 	userCmdReg := userCmds.NewCreateUserCmdHandler(userRepo)
 	userCmdGetAll := userCmds.NewGetAllUsersCmdHandler(userRepo)
@@ -107,12 +111,15 @@ func main() {
 		projectCmdUpdate,
 		projectCmdDelete,
 		projectCmdAll,
+		projectCmdById,
 	)
 
 	specHandler := specificationHandler.NewSpecificationHandler(
 		specificationCmdCreate,
 		specificationCmdUpdate,
 		specificationCmdDelete,
+		specificationCmdByProjectId,
+		specificationCmdGetById,
 	)
 
 	userHandler := userHandler.NewUserHandler(userCmdGet, userCmdReg, userCmdGetAll)

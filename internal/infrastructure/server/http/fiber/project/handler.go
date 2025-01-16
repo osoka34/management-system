@@ -3,6 +3,7 @@ package project
 import (
 	"github.com/gofiber/fiber/v3"
 	"go.uber.org/zap"
+	"service/internal/domain/entity"
 
 	"service/internal/app/command/project"
 	"service/pkg/utils"
@@ -13,6 +14,7 @@ type ProjectHandler struct {
 	updateCmdHandler         *project.UpdateProjectCmdHandler
 	deleteCmdHandler         *project.DeleteProjectCmdHandler
 	getAllProjectsCmdHandler *project.GetAllProjectsCmdHandler
+	getProjectByIdCmdHandler *project.GetProjectByIdCmdHandler
 }
 
 func NewProjectHandler(
@@ -20,12 +22,14 @@ func NewProjectHandler(
 	updateCmdHandler *project.UpdateProjectCmdHandler,
 	deleteCmdHandler *project.DeleteProjectCmdHandler,
 	getAllProjectsCmdHandler *project.GetAllProjectsCmdHandler,
+	getProjectByIdCmdHandler *project.GetProjectByIdCmdHandler,
 ) *ProjectHandler {
 	return &ProjectHandler{
 		createCmdHandler:         createCmdHandler,
 		updateCmdHandler:         updateCmdHandler,
 		deleteCmdHandler:         deleteCmdHandler,
 		getAllProjectsCmdHandler: getAllProjectsCmdHandler,
+		getProjectByIdCmdHandler: getProjectByIdCmdHandler,
 	}
 }
 
@@ -162,4 +166,43 @@ func (h *ProjectHandler) GetAllProjects(
 	}
 
 	return c.Status(fiber.StatusOK).JSON(NewGetAllProjectsResponse(projects))
+}
+
+func (h *ProjectHandler) GetProjectById(
+	c fiber.Ctx,
+) error {
+
+	var (
+		err error
+		in  = GetProjectByIdRequest{}
+	)
+
+	l := zap.L().With(zap.String("method", "GetProjectById"))
+	defer func() {
+		if err != nil {
+			l.Error("failed to get project by id", utils.SilentError(err))
+		} else {
+			l.Info("get project by id successfully")
+		}
+	}()
+
+	if err = c.Bind().JSON(&in); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(utils.BadRequestErr(err))
+	}
+
+	if err = utils.ValidateStruct(&in); err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).
+			JSON(utils.ValidationErr(err))
+	}
+
+	cmd := in.ToCmd()
+
+	var p *entity.Project
+	p, err = h.getProjectByIdCmdHandler.Handle(c.UserContext(), cmd)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.InternalErr(err))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(NewGetProjectByIdResponse(p))
+
 }

@@ -33,9 +33,9 @@ func (r *RequirementRepository) FindById(
 	var daoRequirement RequirementDAO
 	if err := r.db.WithContext(ctx).First(&daoRequirement, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Требование не найдено
+			return nil, err
 		}
-		return nil, err // Ошибка базы данных
+		return nil, err
 	}
 	return daoRequirement.ToEntity(), nil
 }

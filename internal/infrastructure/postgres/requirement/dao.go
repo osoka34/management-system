@@ -11,7 +11,7 @@ import (
 const tableName = "requirements"
 
 func (r *RequirementDAO) TableName() string {
-    return tableName
+	return tableName
 }
 
 type RequirementDAO struct {

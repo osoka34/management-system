@@ -27,9 +27,9 @@ func (r *ProjectRepository) FindById(ctx context.Context, id uuid.UUID) (*entity
 	var daoProject ProjectDAO
 	if err := r.db.WithContext(ctx).First(&daoProject, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Проект не найден
+			return nil, err
 		}
-		return nil, err // Ошибка базы данных
+		return nil, err
 	}
 	return daoProject.ToEntity(), nil
 }

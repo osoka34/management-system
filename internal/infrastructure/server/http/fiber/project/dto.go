@@ -49,15 +49,14 @@ type GetAllProjectsResponse struct {
 	Projects []*Project `json:"projects"`
 }
 
-
 func NewGetAllProjectsResponse(projects []*entity.Project) GetAllProjectsResponse {
-    var projectsDto = make([]*Project, 0, len(projects))
-    for _, project := range projects {
-        projectsDto = append(projectsDto, FromEntity(project))
-    }
-    return GetAllProjectsResponse{
-        Projects: projectsDto,
-    }
+	var projectsDto = make([]*Project, 0, len(projects))
+	for _, project := range projects {
+		projectsDto = append(projectsDto, FromEntity(project))
+	}
+	return GetAllProjectsResponse{
+		Projects: projectsDto,
+	}
 }
 
 type Project struct {
@@ -92,4 +91,24 @@ type UpdateProjectResponse struct {
 
 type DeleteProjectResponse struct {
 	Id string `json:"id"`
+}
+
+type GetProjectByIdRequest struct {
+	Id string `json:"id" required:"true"`
+}
+
+func (r GetProjectByIdRequest) ToCmd() *project.GetProjectByIdCmd {
+	return &project.GetProjectByIdCmd{
+		Id: r.Id,
+	}
+}
+
+type GetProjectByIdResponse struct {
+	Project *Project `json:"project"`
+}
+
+func NewGetProjectByIdResponse(project *entity.Project) *GetProjectByIdResponse {
+	return &GetProjectByIdResponse{
+		Project: FromEntity(project),
+	}
 }
