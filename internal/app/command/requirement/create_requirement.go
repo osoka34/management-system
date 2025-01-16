@@ -61,13 +61,13 @@ func (h *CreateRequirementCmdHandler) Handle(
 	requirement := entity.NewRequirement(
 		cmd.Title,
 		cmd.Description,
-		project.Id,
 		executor.Id,
+		project.Id,
 	)
 
-    if err := h.repoRequirement.CreateRequirement(ctx, requirement); err != nil {
-        return uuid.Nil, err
-    }
+	if err := h.repoRequirement.CreateRequirement(ctx, requirement); err != nil {
+		return uuid.Nil, err
+	}
 
-    return requirement.Id.UUID(), nil
+	return requirement.Id.UUID(), nil
 }

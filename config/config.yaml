@@ -1,0 +1,8 @@
+postgres:
+  host: "localhost"
+  port: "12000"
+  user: "myuser"
+  password: "mypassword"
+  dbname: "mydb"
+server:
+  port: "10000"

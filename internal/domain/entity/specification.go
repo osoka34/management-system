@@ -52,13 +52,13 @@ func NewSpecification(
 }
 
 
-func (s *Specification) UpdateTitle(title string) {
+func (s *Specification) SetTitle(title string) {
     t := time.Now()
     s.Title = title
     s.UpdatedAt = &t
 }
 
-func (s *Specification) UpdateDescription(description string) {
+func (s *Specification) SetDescription(description string) {
     t := time.Now()
     s.Description = description
     s.UpdatedAt = &t

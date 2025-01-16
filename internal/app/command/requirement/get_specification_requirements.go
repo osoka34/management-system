@@ -9,11 +9,11 @@ import (
 	"service/internal/domain/interfaces"
 )
 
-type GetSpenRequirementsCmd struct {
+type GetSpecRequirementsCmd struct {
 	SpecificationId string
 }
 
-type GetSpenRequirementsCmdHandler struct {
+type GetSpecRequirementsCmdHandler struct {
 	repoRequirement   interfaces.RequirementRepository
 	repoSpecification interfaces.SpecificationRepository
 }
@@ -21,16 +21,16 @@ type GetSpenRequirementsCmdHandler struct {
 func NewGetSpenRequirementsCmdHandler(
 	repoRequirement interfaces.RequirementRepository,
 	repoSpecification interfaces.SpecificationRepository,
-) *GetSpenRequirementsCmdHandler {
-	return &GetSpenRequirementsCmdHandler{
+) *GetSpecRequirementsCmdHandler {
+	return &GetSpecRequirementsCmdHandler{
 		repoRequirement:   repoRequirement,
 		repoSpecification: repoSpecification,
 	}
 }
 
-func (h *GetSpenRequirementsCmdHandler) Handle(
+func (h *GetSpecRequirementsCmdHandler) Handle(
 	ctx context.Context,
-	cmd *GetSpenRequirementsCmd,
+	cmd *GetSpecRequirementsCmd,
 ) ([]*entity.Requirement, error) {
 	sid, err := uuid.Parse(cmd.SpecificationId)
 	if err != nil {

@@ -10,6 +10,7 @@ type RegisterRequest struct {
 type RegisterResponse struct {
 	BearerToken  string `json:"bearer_token"`
 	RefreshToken string `json:"refresh_token"`
+	UserId       string `json:"user_id"`
 }
 
 type Login struct {
@@ -20,6 +21,7 @@ type Login struct {
 type LoginResponse struct {
 	BearerToken  string `json:"bearer_token"`
 	RefreshToken string `json:"refresh_token"`
+	UserId       string `json:"user_id"`
 }
 
 func (l Login) ToCmd() *user.GetUserCmd {

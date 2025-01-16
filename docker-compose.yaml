@@ -1,13 +1,12 @@
-version: '3.9'
-
+version: '3.8'
 services:
   postgres:
-    image: postgres:15           
-    container_name: postgres-db   
-    restart: always               
+    image: postgres:15
+    container_name: my_postgres
     ports:
-      - "13000:5432"               
+      - "12000:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: management-system        
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    restart: unless-stopped

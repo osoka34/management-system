@@ -52,12 +52,18 @@ func NewProject(
 
 
 func (p *Project) UpdateTitle(title string) {
+    if title == "" || p.Title == title {
+        return
+    }
     t := time.Now()
     p.Title = title
     p.UpdatedAt = &t
 }
 
 func (p *Project) UpdateDescription(description string) {
+    if description == "" || p.Description == description {
+        return
+    }
     t := time.Now()
     p.Description = description
     p.UpdatedAt = &t

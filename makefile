@@ -1,23 +1,52 @@
-PSQL_URL = postgres://postgres:postgres@localhost:13000/management-system?sslmode=disable
+DB_HOST ?= localhost
+DB_PORT ?= 12000
+DB_USER ?= myuser
+DB_PASSWORD ?= mypassword
+DB_NAME ?= mydb
+DB_SSL_MODE ?= disable
+MIGRATIONS_DIR ?= migrations
 
+DB_URL = postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSL_MODE)
 
-dep:
-	@docker-compose up -d
-	@sleep 3
-	@$(MAKE) migrate-up
+MIGRATE ?= migrate
 
+.PHONY: help
+help:
+	@echo "Использование:"
+	@echo "  make migrate-up       - Применить все миграции"
+	@echo "  make migrate-down     - Откатить миграции"
+	@echo "  make migrate-force    - Принудительно установить версию миграции"
+	@echo "  make migrate-status   - Проверить статус миграций"
 
-down:
-	@docker-compose down
-
+.PHONY: migrate-up
 migrate-up:
-	migrate -path ./migrations -database $(PSQL_URL) up
+	$(MIGRATE) -path $(MIGRATIONS_DIR) -database "$(DB_URL)" up
 
-
+.PHONY: migrate-down
 migrate-down:
-	migrate -path ./migrations -database $(PSQL_URL) down
+	$(MIGRATE) -path $(MIGRATIONS_DIR) -database "$(DB_URL)" down
 
 
+.PHONY: migrate-force
+migrate-force:
+ifndef VERSION
+	$(error VERSION is required. Use: make migrate-force VERSION=version_number)
+endif
+	$(MIGRATE) -path $(MIGRATIONS_DIR) -database "$(DB_URL)" force $(VERSION)
 
-.PHONY: migrate-up migrate-down dep down
+.PHONY: migrate-status
+migrate-status:
+	$(MIGRATE) -path $(MIGRATIONS_DIR) -database "$(DB_URL)" version
+
+
+.PHONY: dep
+dep:
+	docker-compose up -d
+
+
+.PHONY: down
+down:
+	docker-compose down
+
+
 

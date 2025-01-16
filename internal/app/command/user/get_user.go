@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 
@@ -27,6 +28,9 @@ func (h *GetUserCmdHandler) Handle(ctx context.Context, cmd *GetUserCmd) (uuid.U
 	usr, err := h.repo.FindByCreds(ctx, cmd.Login, passHash)
 	if err != nil {
 		return uuid.Nil, err
+	}
+	if usr == nil {
+		return uuid.Nil, errors.New("user not found")
 	}
 	return usr.Id.UUID(), nil
 }

@@ -9,11 +9,11 @@ import (
 type RequirementId uuid.UUID
 
 func (r RequirementId) String() string {
-    return uuid.UUID(r).String()
+	return uuid.UUID(r).String()
 }
 
 func (r RequirementId) UUID() uuid.UUID {
-    return uuid.UUID(r)
+	return uuid.UUID(r)
 }
 
 func NewRequirementId() RequirementId {
@@ -25,7 +25,6 @@ type Requirement struct {
 	Title           string
 	StatusId        Status
 	Description     string
-    Status          Status
 	ExecutorId      UserId
 	ProjectId       ProjectId
 	SpecificationId *SpecificationId
@@ -45,41 +44,51 @@ func NewRequirement(
 		Title:       title,
 		Description: description,
 		ExecutorId:  executor,
-        Status:      StatusCreate,
+		StatusId:      StatusCreate,
 		ProjectId:   projectId,
 		CreatedAt:   &t,
 		UpdatedAt:   &t,
 	}
 }
 
-
 func (r *Requirement) SetSpecification(specificationId SpecificationId) {
-    t := time.Now()
-    r.SpecificationId = &specificationId
-    r.UpdatedAt = &t
+	if specificationId.String() == "" {
+		return
+	}
+	t := time.Now()
+	r.SpecificationId = &specificationId
+	r.UpdatedAt = &t
 }
 
-func (r *Requirement) UpdateExecutor(executor UserId) {
-    t := time.Now()
-    r.ExecutorId = executor
-    r.UpdatedAt = &t
+func (r *Requirement) SetExecutor(executor UserId) {
+    if executor.String() == "" {
+        return
+    }
+	t := time.Now()
+	r.ExecutorId = executor
+	r.UpdatedAt = &t
 }
 
-func (r *Requirement) UpdateTitle(title string) {
-    t := time.Now()
-    r.Title = title
-    r.UpdatedAt = &t
+func (r *Requirement) SetTitle(title string) {
+    if title == "" || r.Title == title {
+        return
+    }
+	t := time.Now()
+	r.Title = title
+	r.UpdatedAt = &t
 }
 
-func (r *Requirement) UpdateDescription(description string) {
-    t := time.Now()
-    r.Description = description
-    r.UpdatedAt = &t
+func (r *Requirement) SetDescription(description string) {
+    if description == "" || r.Description == description {
+        return
+    }
+	t := time.Now()
+	r.Description = description
+	r.UpdatedAt = &t
 }
-
 
 func (r *Requirement) Delete() {
-    t := time.Now()
-    r.UpdatedAt = &t
-    r.Status = StatusClosed
+	t := time.Now()
+	r.UpdatedAt = &t
+	r.StatusId = StatusClosed
 }
