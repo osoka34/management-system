@@ -11,6 +11,7 @@ func (h *UserHandler) Map(router fiber.Router) {
 
 	group.Post("/register", h.Register)
 	group.Post("/login", h.Login)
+	group.Get("/all", h.GetAllUsers)
 
 	authorization := group.Group("/auth", middleware.Authorization)
 

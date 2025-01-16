@@ -10,15 +10,17 @@ import (
 )
 
 type UserHandler struct {
-	cmdGet *user.GetUserCmdHandler
-	cmdReg *user.CreateUserCmdHandler
+	cmdGet    *user.GetUserCmdHandler
+	cmdReg    *user.CreateUserCmdHandler
+	cmdGetAll *user.GetAllUsersCmdHandler
 }
 
 func NewUserHandler(
 	cmdGet *user.GetUserCmdHandler,
 	cmdReg *user.CreateUserCmdHandler,
+	cmdGetAll *user.GetAllUsersCmdHandler,
 ) *UserHandler {
-	return &UserHandler{cmdGet: cmdGet, cmdReg: cmdReg}
+	return &UserHandler{cmdGet: cmdGet, cmdReg: cmdReg, cmdGetAll: cmdGetAll}
 }
 
 func (h *UserHandler) Register(c fiber.Ctx) error {
@@ -94,7 +96,7 @@ func (h *UserHandler) Login(c fiber.Ctx) error {
 	var uid uuid.UUID
 	uid, err = h.cmdGet.Handle(c.UserContext(), cmd)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"success": true})
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.InternalErr(err))
 	}
 
 	bearer, refresh, err := utils.GenerateTokens(in.Login, uid.String())
@@ -148,4 +150,23 @@ func (h *UserHandler) RefreshToken(c fiber.Ctx) error {
 			BearerToken:  bearer,
 			RefreshToken: refresh,
 		})
+}
+
+func (h *UserHandler) GetAllUsers(c fiber.Ctx) error {
+	var err error
+	l := zap.L().With(zap.String("method", "GetAllUsers"))
+	defer func() {
+		if err != nil {
+			l.Error("failed to get all users", utils.SilentError(err))
+		} else {
+			l.Info("all users successfully")
+		}
+	}()
+
+	users, err := h.cmdGetAll.Handle(c.UserContext(), &user.GetAllCommand{})
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.InternalErr(err))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(NewGetAllUsersResponse(users))
 }

@@ -91,6 +91,7 @@ func main() {
 
 	userCmdGet := userCmds.NewGetUserCmdHandler(userRepo)
 	userCmdReg := userCmds.NewCreateUserCmdHandler(userRepo)
+	userCmdGetAll := userCmds.NewGetAllUsersCmdHandler(userRepo)
 
 	requirementHandler := requirementHandler.NewRequirementHandler(
 		requirementCmdCreate,
@@ -114,7 +115,7 @@ func main() {
 		specificationCmdDelete,
 	)
 
-	userHandler := userHandler.NewUserHandler(userCmdGet, userCmdReg)
+	userHandler := userHandler.NewUserHandler(userCmdGet, userCmdReg, userCmdGetAll)
 
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{

@@ -52,3 +52,19 @@ func (r *UserRepository) UpdateUser(ctx context.Context, user *entity.User) erro
 	daoUser := FromEntity(user)
 	return r.db.WithContext(ctx).Save(daoUser).Error
 }
+
+
+func (r *UserRepository) GetAllUsers(ctx context.Context) ([]*entity.User, error) {
+	var daoUsers []*UserDAO
+
+	if err := r.db.WithContext(ctx).Find(&daoUsers).Error; err != nil {
+		return nil, err
+	}
+
+	var users []*entity.User
+	for _, daoUser := range daoUsers {
+		users = append(users, daoUser.ToEntity())
+	}
+
+	return users, nil
+}

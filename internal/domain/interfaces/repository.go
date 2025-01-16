@@ -13,6 +13,7 @@ type UserRepository interface {
 	FindById(ctx context.Context, id uuid.UUID) (*entity.User, error)
 	FindByCreds(ctx context.Context, login, hash string) (*entity.User, error)
 	UpdateUser(ctx context.Context, user *entity.User) error
+	GetAllUsers(ctx context.Context) ([]*entity.User, error)
 }
 
 type SpecificationRepository interface {
