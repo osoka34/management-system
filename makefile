@@ -17,6 +17,8 @@ help:
 	@echo "  make migrate-down     - Откатить миграции"
 	@echo "  make migrate-force    - Принудительно установить версию миграции"
 	@echo "  make migrate-status   - Проверить статус миграций"
+	@echo "  make dep              - Запустить зависимости"
+	@echo "  make down             - Остановить зависимости"
 
 .PHONY: migrate-up
 migrate-up:
